@@ -1,50 +1,100 @@
-# Welcome to your Expo app 👋
+# 🔐 SafeKeys
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**SafeKeys** est une application mobile open source de gestion de mots de passe. Elle a été pensée pour être **simple**, **pédagogique**, **sécurisée** et **accessible à tous**, même aux utilisateurs non-techniques.
 
-## Get started
+---
 
-1. Install dependencies
+## 🧠 Concept
 
-   ```bash
-   npm install
-   ```
+SafeKeys vous permet de :
 
-2. Start the app
+- Gérer facilement vos identifiants, mots de passe et autres données sensibles
+- Stocker de manière chiffrée des clés API, codes Wi-Fi, numéros de carte, etc.
+- Partager temporairement un mot de passe via un lien sécurisé à durée limitée
+- Accéder à vos données hors-ligne
+- Utiliser l'application **sans aucun cloud** par défaut (100% local)
+- Activer la synchronisation **chiffrée et privée** (peer-to-peer ou via un stockage auto-hébergé)
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## 🎯 Objectifs
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- Créer une app **pédagogique**, claire et moderne
+- Garantir la **souveraineté** des données utilisateurs
+- Fonctionner **hors-ligne** dès l’installation
+- Ne **forcer aucun cloud** tiers
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+---
 
-## Get a fresh project
+## 👥 Public ciblé
 
-When you're ready, run:
+| Segment                             | Besoin principal                               |
+| ----------------------------------- | ---------------------------------------------- |
+| Étudiants, développeurs             | Gérer mots de passe et clés sans prise de tête |
+| Particuliers soucieux de vie privée | Ne pas dépendre du cloud US                    |
+| Freelances, techs                   | Simplicité, import/export des données          |
+| Seniors, utilisateurs non-tech      | Interface rassurante et simple                 |
+| ONG, journalistes, militants        | 100% hors-ligne, sans inscription              |
+
+---
+
+## ✨ Fonctionnalités — MVP
+
+- 🔐 Stockage local chiffré AES-256
+- 🧩 Organisation en catégories (Sites, Apps, Perso, etc.)
+- 📥 Import CSV sécurisé
+- 📤 Export chiffré (format `.vault`)
+- 🔑 Authentification biométrique (Face ID / Empreinte)
+- 🌙 Mode hors-ligne total (aucune connexion sortante)
+- 💾 Sauvegarde manuelle chiffrée
+- 📱 UI intuitive (moins de 3 clics pour accéder à un mot de passe)
+
+---
+
+## ⚙️ Stack technique
+
+| Côté                           | Stack choisie                                                                         |
+| ------------------------------ | ------------------------------------------------------------------------------------- |
+| 📱 Front-end Mobile            | [React Native](https://reactnative.dev/) avec Expo                                    |
+| 💅 Design                      | [TailwindCSS](https://tailwindcss.com/) via [NativeWind](https://www.nativewind.dev/) |
+| ⚛️ État global                 | Zustand ou Jotai (léger, simple à maintenir)                                          |
+| 🔐 Sécurité locale             | Chiffrement AES-256, SecureStore, biométrie                                           |
+| 🔗 Synchronisation (plus tard) | Chiffrement bout-à-bout, P2P ou auto-hébergé                                          |
+
+---
+
+## 🛡️ Sécurité
+
+- Aucune donnée transmise sans action explicite
+- Pas de tracking, pas de cloud imposé
+- Chiffrement local fort avec AES-256
+- Données stockées de manière sécurisée sur l'appareil
+- Synchronisation optionnelle uniquement via moyens souverains (P2P ou WebDAV auto-hébergé)
+
+---
+
+## 🚧 Roadmap
+
+- [x] Design System et palette de couleurs
+- [ ] CRUD des mots de passe localement
+- [ ] Authentification biométrique
+- [ ] Export / Import chiffré
+- [ ] Partage temporaire de mot de passe (via QR ou lien)
+- [ ] Synchronisation P2P / WebDAV
+- [ ] Mode onboarding pédagogique
+
+---
+
+## 📦 Installation
 
 ```bash
-npm run reset-project
+# Cloner le projet
+git clone git@github.com:CapelleGab/SafeKeys.git
+cd SafeKeys
+
+# Installer les dépendances
+npm install
+
+# Lancer l'application
+npx expo start
 ```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
