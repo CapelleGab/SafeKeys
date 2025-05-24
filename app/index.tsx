@@ -3,19 +3,19 @@ import { Text, View } from "react-native";
 
 export default function Index() {
   return (
-    <View className="flex-1 bg-gradient-to-b from-blue-50 to-white p-6">
-      <View className="flex-1 items-center justify-center">
+    <View className="flex-1 p-10 bg-gradient-to-b from-blue-50 to-white">
+      <View className="items-center justify-center flex-1">
         <View className="items-center mb-4">
           <Text className="text-6xl font-extrabold text-blue-600">
             SafeKeys
           </Text>
-          <Text className="text-lg text-blue-400 font-medium">
+          <Text className="text-lg font-medium text-blue-400">
             Votre coffre-fort numérique
           </Text>
         </View>
 
         <View className="max-w-md mb-5">
-          <Text className="text-center text-gray-600 leading-relaxed">
+          <Text className="leading-relaxed text-center text-gray-600">
             Bienvenue dans SafeKeys — la sécurité accessible à tous. Ici, pas
             besoin d&apos;être un expert pour protéger vos données personnelles.
             SafeKeys a été conçu pour guider pas à pas tous les utilisateurs,
@@ -24,17 +24,17 @@ export default function Index() {
           </Text>
         </View>
 
-        <View className="flex justify-center items-center gap-3">
+        <View className="flex items-center justify-center gap-3">
           <Link
-            href="/vault/vault"
-            className="bg-blue-600 px-8 py-3 rounded-full shadow-lg active:bg-blue-700"
+            href="/passwords"
+            className="px-8 py-3 bg-blue-600 rounded-full shadow-lg active:bg-blue-700"
           >
-            <Text className="text-white font-semibold text-lg">
+            <Text className="text-lg font-semibold text-white">
               Accéder au coffre-fort
             </Text>
           </Link>
           <Link href="/designSystemScreen">
-            <Text className="text-blue-600 font-semibold text-lg">
+            <Text className="text-lg font-semibold text-blue-600">
               Design System
             </Text>
           </Link>
