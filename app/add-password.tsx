@@ -1,18 +1,26 @@
 import Input from "@/components/ui/Input";
-import Password from "@/types/passwordType";
+import { passwordService } from "@/services/passwordService";
 import { router } from "expo-router";
-import { Lock, Save } from "lucide-react-native";
+import { Lock, Save, Shuffle } from "lucide-react-native";
 import { useState } from "react";
-import { Pressable, ScrollView, StatusBar, Text, View } from "react-native";
+import {
+  Alert,
+  Pressable,
+  ScrollView,
+  StatusBar,
+  Text,
+  View,
+} from "react-native";
 
 export default function AddPassword() {
-  const [email, setEmail] = useState("");
+  const [title, setTitle] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [type, setType] = useState<"email" | "bank" | "social" | "other">(
-    "email"
-  );
+  const [url, setUrl] = useState("");
+  const [category, setCategory] = useState("email");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const typeOptions = [
+  const categoryOptions = [
     {
       value: "email",
       label: "📧 Email",
@@ -32,6 +40,12 @@ export default function AddPassword() {
       selectedColor: "bg-blue-600 text-white",
     },
     {
+      value: "work",
+      label: "💼 Travail",
+      color: "bg-white text-gray-700",
+      selectedColor: "bg-blue-600 text-white",
+    },
+    {
       value: "other",
       label: "🔧 Autre",
       color: "bg-white text-gray-700",
@@ -39,27 +53,40 @@ export default function AddPassword() {
     },
   ] as const;
 
-  const handleSave = () => {
-    if (!email.trim() || !password.trim()) {
-      alert("Veuillez remplir tous les champs obligatoires");
+  const generatePassword = () => {
+    try {
+      const generatedPassword = passwordService.generatePassword();
+      setPassword(generatedPassword);
+    } catch (error) {
+      console.error("Erreur génération mot de passe:", error);
+      Alert.alert("Erreur", "Impossible de générer un mot de passe");
+    }
+  };
+
+  const handleSave = async () => {
+    if (!title.trim() || !username.trim() || !password.trim()) {
+      Alert.alert("Erreur", "Veuillez remplir tous les champs obligatoires");
       return;
     }
 
-    const newPassword: Omit<Password, "id" | "createdAt" | "updatedAt"> = {
-      email: email.trim(),
-      password: password.trim(),
-      type,
-      isFavorite: false, // Par défaut, pas en favori
-    };
+    setIsLoading(true);
+    try {
+      await passwordService.addPassword({
+        title: title.trim(),
+        username: username.trim(),
+        password: password.trim(),
+        url: url.trim() || undefined,
+        category: category,
+      });
 
-    console.log("Nouveau mot de passe:", {
-      ...newPassword,
-      id: Date.now().toString(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    });
-
-    router.back();
+      // Retourner directement à la page précédente sans alerte
+      router.back();
+    } catch (error) {
+      console.error("Erreur lors de la sauvegarde:", error);
+      Alert.alert("Erreur", "Impossible de sauvegarder le mot de passe");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -81,27 +108,63 @@ export default function AddPassword() {
             </Text>
           </View>
 
-          {/* Email Input */}
+          {/* Title Input */}
           <Input
-            label="Email / Identifiant"
+            label="Titre / Nom du service"
+            type="text"
+            value={title}
+            onChangeText={setTitle}
+            placeholder="Ex: Gmail, Facebook, Banque..."
+            required
+          />
+
+          {/* Username Input */}
+          <Input
+            label="Nom d'utilisateur / Email"
             type="email"
-            value={email}
-            onChangeText={setEmail}
+            value={username}
+            onChangeText={setUsername}
             placeholder="exemple@email.com"
             required
           />
 
-          {/* Password Input */}
+          {/* Password Input avec générateur */}
+          <View>
+            <Input
+              label="Mot de passe"
+              type="password"
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Votre mot de passe"
+              required
+            />
+            <Pressable
+              onPress={generatePassword}
+              className="flex-row items-center justify-center w-full px-4 py-2 mt-2 border border-blue-300 rounded-lg bg-blue-50"
+              style={({ pressed }) => [
+                pressed && {
+                  backgroundColor: "#dbeafe",
+                  transform: [{ scale: 0.98 }],
+                },
+              ]}
+            >
+              <Shuffle size={16} color="#2563eb" />
+              <Text className="ml-2 text-sm font-medium text-blue-600">
+                Générer un mot de passe sécurisé
+              </Text>
+            </Pressable>
+          </View>
+
+          {/* URL Input */}
           <Input
-            label="Mot de passe"
-            type="password"
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Votre mot de passe"
-            required
+            label="Site web (optionnel)"
+            type="text"
+            value={url}
+            onChangeText={setUrl}
+            placeholder="https://example.com"
           />
 
-          {/* Type de compte avec tags */}
+          {/* Catégorie avec tags */}
           <View>
             <Text className="mb-4 text-lg font-semibold text-gray-800">
               Catégorie
@@ -112,12 +175,12 @@ export default function AddPassword() {
               className="flex-row"
               contentContainerStyle={{ paddingRight: 20 }}
             >
-              {typeOptions.map((option, index) => (
+              {categoryOptions.map((option, index) => (
                 <Pressable
                   key={option.value}
-                  onPress={() => setType(option.value)}
+                  onPress={() => setCategory(option.value)}
                   className={`px-4 py-2 rounded-full border-2 ${
-                    type === option.value
+                    category === option.value
                       ? `bg-blue-600 border-blue-600`
                       : `bg-white border-gray-300`
                   } ${index > 0 ? "ml-3" : ""}`}
@@ -129,7 +192,7 @@ export default function AddPassword() {
                 >
                   <Text
                     className={`font-medium ${
-                      type === option.value ? "text-white" : "text-gray-700"
+                      category === option.value ? "text-white" : "text-gray-700"
                     }`}
                   >
                     {option.label}
@@ -152,7 +215,7 @@ export default function AddPassword() {
               avant d&apos;être stockés. Nous utilisons un chiffrement de bout
               en bout, ce qui signifie que même nous ne pouvons pas accéder à
               vos données. Chaque mot de passe est protégé par une clé unique et
-              votre authentification biométrique.
+              votre mot de passe maître.
             </Text>
           </View>
 
@@ -160,7 +223,10 @@ export default function AddPassword() {
           <View className="bg-gradient-to-t from-white via-white to-transparent">
             <Pressable
               onPress={handleSave}
-              className="flex-row items-center justify-center w-full px-6 py-4 bg-blue-600 rounded-2xl"
+              disabled={isLoading}
+              className={`flex-row items-center justify-center w-full px-6 py-4 rounded-2xl ${
+                isLoading ? "bg-gray-400" : "bg-blue-600"
+              }`}
               style={({ pressed }) => [
                 {
                   shadowColor: "#2563eb",
@@ -169,16 +235,17 @@ export default function AddPassword() {
                   shadowRadius: 12,
                   elevation: 8,
                 },
-                pressed && {
-                  backgroundColor: "#1e40af",
-                  transform: [{ scale: 0.98 }],
-                  shadowOpacity: 0.1,
-                },
+                pressed &&
+                  !isLoading && {
+                    backgroundColor: "#1e40af",
+                    transform: [{ scale: 0.98 }],
+                    shadowOpacity: 0.1,
+                  },
               ]}
             >
               <Save size={24} color="white" />
               <Text className="ml-3 text-lg font-bold text-white">
-                Sauvegarder
+                {isLoading ? "Sauvegarde..." : "Sauvegarder"}
               </Text>
             </Pressable>
           </View>
