@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import { Lock } from "lucide-react-native";
 import { useEffect } from "react";
-import { Text, View } from "react-native";
+import { StatusBar, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -38,6 +38,11 @@ export default function Index() {
 
   return (
     <View className="items-center justify-center flex-1 bg-gradient-to-b from-blue-600 to-blue-800">
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor="transparent"
+        translucent
+      />
       <Animated.View style={[animatedStyle]} className="items-center">
         <Lock size={100} color="black" />
         <Text className="mt-10 mb-2 text-5xl font-extrabold text-primary">

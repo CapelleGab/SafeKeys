@@ -1,9 +1,14 @@
 import { Link, router } from "expo-router";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, StatusBar, Text, View } from "react-native";
 
 export default function Home() {
   return (
     <View className="flex-1 p-10 bg-gradient-to-b from-blue-50 to-white">
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="transparent"
+        translucent
+      />
       <View className="items-center justify-center flex-1">
         <View className="items-center mb-4">
           <Text className="text-6xl font-extrabold text-blue-600">

@@ -6,7 +6,14 @@ export default function RootLayout() {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="home" options={{ headerShown: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="add-password"
+        options={{ title: "Ajouter un mot de passe" }}
+      />
+      <Stack.Screen
+        name="(tabs)"
+        options={{ headerShown: false, title: "Back" }}
+      />
       <Stack.Screen
         name="designSystemScreen"
         options={{ headerShown: false }}
